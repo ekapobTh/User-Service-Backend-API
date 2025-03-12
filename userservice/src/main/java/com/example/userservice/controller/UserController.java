@@ -30,11 +30,6 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
-    @GetMapping("/hello")
-    public String hello(){
-        return String.format("Hello World!");
-    }
-
     // Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
