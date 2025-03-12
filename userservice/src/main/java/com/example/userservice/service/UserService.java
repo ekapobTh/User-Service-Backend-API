@@ -25,13 +25,25 @@ public class UserService {
         return userDictionary.values();
     }
 
-    // Optional: Find a user by their ID
+    // Find a user by their ID
     public User getUserById(Long id) {
         return userDictionary.get(id);
     }
 
-    // Optional: Delete a user by their ID
-    public void deleteUser(Long id) {
-        userDictionary.remove(id);
+    // Update a user by ID
+    public User updateUser(User user) {
+        if (userDictionary.containsKey(user.getId())) {
+            userDictionary.put(user.getId(), user);
+            return user;
+        }
+        return null;
+    }
+
+    // Delete a user by their ID
+    public Boolean deleteUser(Long id) {
+        Boolean isUserAvailable = userDictionary.containsKey(id);
+        if(isUserAvailable)
+            userDictionary.remove(id);
+        return isUserAvailable;
     }
 }
