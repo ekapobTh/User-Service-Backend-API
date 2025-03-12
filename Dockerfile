@@ -1,27 +1,27 @@
-# ----------------------
+# -------------------------------------------
 # 1) BUILD STAGE
-# ----------------------
-FROM maven:3.8.6-openjdk-17 AS build
+# -------------------------------------------
+FROM maven:3.8.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy the source code
+# Copy the Maven descriptor and source code
 COPY pom.xml .
 COPY src ./src
 
-# Package the application
+# Build the application (skip tests for speed)
 RUN mvn clean package -DskipTests
 
-# ----------------------
+# -------------------------------------------
 # 2) RUN STAGE
-# ----------------------
-FROM openjdk:17-jdk-alpine
+# -------------------------------------------
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copy only the final jar from the build stage
-COPY --from=build /app/target/userservice-*.jar /app/userservice.jar
+# Copy the generated JAR from the build stage
+COPY --from=build /app/target/userservice-0.0.1-SNAPSHOT.jar /app/userservice.jar
 
-# Expose the port your Spring Boot app listens on (default 8080)
+# Expose the Spring Boot port (default 8080)
 EXPOSE 8080
 
-# Run the Spring Boot application
+# Start the Spring Boot application
 ENTRYPOINT ["java","-jar","/app/userservice.jar"]
