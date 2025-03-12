@@ -5,53 +5,33 @@ import com.example.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final Map<Long, User> userDictionary = new HashMap<>();
+    private long idCounter = 1;  // To simulate auto-generated IDs
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    // Fetch all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    // Save user
+    // Save a user in the "dictionary" (in-memory map)
     public User saveUser(User user) {
-        return userRepository.save(user);
+        user.setId(idCounter++);  // Assign a unique ID to the user
+        userDictionary.put(user.getId(), user);  // Save the user in the dictionary
+        return user;
     }
 
-    // Get user by ID
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    // Get all users from the dictionary
+    public Collection<User> getAllUsers() {
+        return userDictionary.values();
     }
 
-    // Update user
-    public Optional<User> updateUser(Long id, User user) {
-        return userRepository.findById(id).map(existingUser -> {
-            existingUser.setName(user.getName());
-            existingUser.setUsername(user.getUsername());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setPhone(user.getPhone());
-            existingUser.setWebsite(user.getWebsite());
-            existingUser.setAddress(user.getAddress());
-            existingUser.setCompany(user.getCompany());
-            return userRepository.save(existingUser);
-        });
+    // Optional: Find a user by their ID
+    public User getUserById(Long id) {
+        return userDictionary.get(id);
     }
 
-    // Delete user
-    public boolean deleteUser(Long id) {
-        return userRepository.findById(id).map(user -> {
-            userRepository.delete(user);
-            return true;
-        }).orElse(false);
+    // Optional: Delete a user by their ID
+    public void deleteUser(Long id) {
+        userDictionary.remove(id);
     }
 }
