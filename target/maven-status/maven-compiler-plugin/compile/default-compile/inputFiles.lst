@@ -1,0 +1,8 @@
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/UserserviceApplication.java
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/controller/UserController.java
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/model/Address.java
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/model/Company.java
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/model/Geo.java
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/model/User.java
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/repository/UserRepository.java
+/Users/john/Documents/GitHub/BBL-Java-Springboot-Test/userservice/src/main/java/com/example/userservice/service/UserService.java

@@ -1,0 +1,8 @@
+com/example/userservice/controller/UserController.class
+com/example/userservice/model/User.class
+com/example/userservice/repository/UserRepository.class
+com/example/userservice/model/Geo.class
+com/example/userservice/model/Address.class
+com/example/userservice/UserserviceApplication.class
+com/example/userservice/service/UserService.class
+com/example/userservice/model/Company.class

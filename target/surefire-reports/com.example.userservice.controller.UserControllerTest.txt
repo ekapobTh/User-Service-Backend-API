@@ -1,0 +1,46 @@
+-------------------------------------------------------------------------------
+Test set: com.example.userservice.controller.UserControllerTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 6, Skipped: 0, Time elapsed: 0.068 s <<< FAILURE! -- in com.example.userservice.controller.UserControllerTest
+com.example.userservice.controller.UserControllerTest.testSaveUser -- Time elapsed: 0.020 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.userservice.service.UserService.saveUser(com.example.userservice.model.User)" because "this.userService" is null
+	at com.example.userservice.controller.UserControllerTest.testSaveUser(UserControllerTest.java:49)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.example.userservice.controller.UserControllerTest.testGetAllUsers -- Time elapsed: 0.008 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.userservice.service.UserService.getAllUsers()" because "this.userService" is null
+	at com.example.userservice.controller.UserControllerTest.testGetAllUsers(UserControllerTest.java:63)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.example.userservice.controller.UserControllerTest.testUpdateUser -- Time elapsed: 0.006 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.userservice.service.UserService.getUserById(java.lang.Long)" because "this.userService" is null
+	at com.example.userservice.controller.UserControllerTest.testUpdateUser(UserControllerTest.java:87)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.example.userservice.controller.UserControllerTest.testDeleteUser -- Time elapsed: 0.006 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.userservice.service.UserService.deleteUser(java.lang.Long)" because "this.userService" is null
+	at com.example.userservice.controller.UserControllerTest.testDeleteUser(UserControllerTest.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.example.userservice.controller.UserControllerTest.testGetUserById -- Time elapsed: 0.006 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.userservice.service.UserService.getUserById(java.lang.Long)" because "this.userService" is null
+	at com.example.userservice.controller.UserControllerTest.testGetUserById(UserControllerTest.java:75)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.example.userservice.controller.UserControllerTest.testDeleteUserNotFound -- Time elapsed: 0.006 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.userservice.service.UserService.deleteUser(java.lang.Long)" because "this.userService" is null
+	at com.example.userservice.controller.UserControllerTest.testDeleteUserNotFound(UserControllerTest.java:113)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

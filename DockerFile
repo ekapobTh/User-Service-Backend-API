@@ -1,0 +1,27 @@
+`# ----------------------
+# 1) BUILD STAGE
+# ----------------------
+FROM maven:3.8.6-openjdk-17 AS build
+WORKDIR /app
+
+# Copy the source code
+COPY pom.xml .
+COPY src ./src
+
+# Package the application
+RUN mvn clean package -DskipTests
+
+# ----------------------
+# 2) RUN STAGE
+# ----------------------
+FROM openjdk:17-jdk-alpine
+WORKDIR /app
+
+# Copy only the final jar from the build stage
+COPY --from=build /app/target/userservice-*.jar /app/userservice.jar
+
+# Expose the port your Spring Boot app listens on (default 8080)
+EXPOSE 8080
+
+# Run the Spring Boot application
+ENTRYPOINT ["java","-jar","/app/userservice.jar"]
