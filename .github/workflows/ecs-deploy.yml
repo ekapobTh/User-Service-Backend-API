@@ -1,0 +1,94 @@
+name: Build and Deploy to ECS
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ----------------------
+      # 1) CHECK OUT REPO
+      # ----------------------
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      # ----------------------
+      # 2) SET UP JAVA (17)
+      # ----------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: 17
+
+      # ----------------------
+      # 3) BUILD WITH MAVEN
+      # ----------------------
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      # ----------------------
+      # 4) CONFIGURE AWS CREDENTIALS
+      # ----------------------
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # ----------------------
+      # 5) LOG IN TO ECR
+      # ----------------------
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
+            | docker login --username AWS --password-stdin \
+              $(aws sts get-caller-identity --query Account --output text).dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+      # ----------------------
+      # 6) BUILD & PUSH DOCKER IMAGE
+      # ----------------------
+      - name: Build and push image to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+        run: |
+          # Grab AWS Account ID dynamically
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}"
+          
+          # Build Docker image
+          docker build -t $ECR_URI:latest .
+          
+          # Push Docker image
+          docker push $ECR_URI:latest
+
+      # ----------------------
+      # 7) RENDER UPDATED TASK DEFINITION
+      # ----------------------
+      - name: Fill in the new image ID in the ECS task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ecs-task-definition.json
+          container-name: userservice
+          # same container name as in ecs-task-definition.json
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+
+      # ----------------------
+      # 8) DEPLOY TO ECS
+      # ----------------------
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE }}
+          cluster: ${{ secrets.ECS_CLUSTER }}
+          wait-for-service-stability: true
